@@ -174,6 +174,7 @@ function Scene({
           title={file.name}
           filePath={file.path}
           color={color}
+          preview={file.preview}
           onClick={onFileClick}
           onHover={onHover}
         />

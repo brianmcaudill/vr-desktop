@@ -8,6 +8,7 @@ export interface FileEntry {
   extension: string | null;
   isImage?: boolean;
   thumbnail?: string | null;
+  preview?: string | null;
 }
 
 export interface FileContent {

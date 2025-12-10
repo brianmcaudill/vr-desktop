@@ -93,7 +93,10 @@ function setupIPCHandlers(): void {
       return entries.map(entry => {
         const ext = entry.isFile() ? path.extname(entry.name).toLowerCase() : null;
         const isImage = ext ? imageExtensions.includes(ext) : false;
+        const textExtensions = ['.txt', '.md', '.json', '.js', '.ts', '.tsx', '.jsx', '.css', '.html', '.yml', '.yaml', '.xml', '.csv', '.log'];
+        const isText = ext ? textExtensions.includes(ext) : false;
         let thumbnail: string | null = null;
+        let preview: string | null = null;
 
         // Generate thumbnail for images
         if (isImage) {
@@ -113,6 +116,18 @@ function setupIPCHandlers(): void {
           }
         }
 
+        // Generate text preview for text files
+        if (isText) {
+          try {
+            const filePath = path.join(targetPath, entry.name);
+            const content = fs.readFileSync(filePath, 'utf-8');
+            // Get first 500 characters for preview
+            preview = content.substring(0, 500);
+          } catch {
+            // Failed to read text file
+          }
+        }
+
         return {
           name: entry.name,
           path: path.join(targetPath, entry.name),
@@ -121,6 +136,7 @@ function setupIPCHandlers(): void {
           extension: ext,
           isImage,
           thumbnail,
+          preview,
         };
       });
     } catch (error) {
