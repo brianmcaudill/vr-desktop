@@ -9,7 +9,9 @@ import { Notepad } from './components/Notepad';
 import { Folder } from './components/Folder';
 import { GenericFile } from './components/GenericFile';
 import { Picture } from './components/Picture';
+import { WallArt } from './components/WallArt';
 import { FileEntry, getFileColor, getObjectTypeFromFile } from './types';
+import { actyraLogoSvg } from './assets/actyraLogo';
 
 // Generate deterministic rotation based on file path hash
 function getRotationFromPath(path: string, range: number): number {
@@ -194,11 +196,11 @@ function Scene({
 
   return (
     <>
-      {/* Controls */}
+      {/* Controls - unlimited zoom */}
       <CameraControls
         target={[0, 1, -2]}
-        minDistance={1}
-        maxDistance={8}
+        minDistance={0.1}
+        maxDistance={20}
         maxPolarAngle={Math.PI / 2}
       />
 
@@ -216,6 +218,16 @@ function Scene({
       <Room size={10} />
       <Desk position={[0, 0, -3]} />
       <Shelf position={[-4, 0, -4]} shelves={4} />
+
+      {/* Actyra logo on wall behind desk */}
+      <WallArt
+        position={[0, 2.2, -4.9]}
+        width={1.8}
+        height={0.7}
+        imageSrc={actyraLogoSvg}
+        frameColor="#1a1a2e"
+        frameWidth={0.05}
+      />
 
       {/* File objects */}
       {folderObjects}
