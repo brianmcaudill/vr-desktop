@@ -1,6 +1,6 @@
 {
   "name": "vr-desktop",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "description": "Virtual Desktop World - Interact with files as physical objects in 3D space",
   "main": "./dist/main.js",
   "author": "Brian McAudill",

@@ -10,6 +10,7 @@ import { Folder } from './components/Folder';
 import { GenericFile } from './components/GenericFile';
 import { Picture } from './components/Picture';
 import { WallArt } from './components/WallArt';
+import { Label3D } from './components/Label3D';
 import { FileEntry, getFileColor, getObjectTypeFromFile } from './types';
 import { actyraLogoSvg } from './assets/actyraLogo';
 
@@ -91,11 +92,13 @@ function Scene({
   onFileClick,
   onFolderClick,
   onHover,
+  showNames,
 }: {
   files: FileEntry[];
   onFileClick: (path: string) => void;
   onFolderClick: (path: string) => void;
   onHover: (name: string | null) => void;
+  showNames: boolean;
 }) {
   // Position files on desk and shelf
   const deskY = 0.85; // Desk surface height
@@ -115,14 +118,21 @@ function Scene({
     const z = -3;
 
     return (
-      <Folder
-        key={folder.path}
-        position={[x, y, z]}
-        name={folder.name}
-        filePath={folder.path}
-        onClick={onFolderClick}
-        onHover={onHover}
-      />
+      <React.Fragment key={folder.path}>
+        <Folder
+          position={[x, y, z]}
+          name={folder.name}
+          filePath={folder.path}
+          onClick={onFolderClick}
+          onHover={onHover}
+        />
+        {showNames && (
+          <Label3D
+            text={folder.name}
+            position={[x, y + 0.12, z + 0.05]}
+          />
+        )}
+      </React.Fragment>
     );
   });
 
@@ -139,58 +149,69 @@ function Scene({
     // Use deterministic rotation based on file path
     const rotation = getRotationFromPath(file.path, 0.2);
 
+    // Label position above the object
+    const labelY = deskY + 0.25;
+
     if (type === 'picture' && file.thumbnail) {
       return (
-        <Picture
-          key={file.path}
-          position={[x, deskY + 0.08, z]}
-          rotation={[-Math.PI / 6, rotation, 0]}
-          name={file.name}
-          filePath={file.path}
-          imageSrc={file.thumbnail}
-          onClick={onFileClick}
-          onHover={onHover}
-        />
+        <React.Fragment key={file.path}>
+          <Picture
+            position={[x, deskY + 0.08, z]}
+            rotation={[-Math.PI / 6, rotation, 0]}
+            name={file.name}
+            filePath={file.path}
+            imageSrc={file.thumbnail}
+            onClick={onFileClick}
+            onHover={onHover}
+          />
+          {showNames && <Label3D text={file.name} position={[x, labelY, z]} />}
+        </React.Fragment>
       );
     } else if (type === 'book') {
       return (
-        <Book
-          key={file.path}
-          position={[x, deskY + 0.11, z]}
-          rotation={[0, rotation, 0]}
-          title={file.name}
-          filePath={file.path}
-          color={color}
-          onClick={onFileClick}
-          onHover={onHover}
-        />
+        <React.Fragment key={file.path}>
+          <Book
+            position={[x, deskY + 0.11, z]}
+            rotation={[0, rotation, 0]}
+            title={file.name}
+            filePath={file.path}
+            color={color}
+            onClick={onFileClick}
+            onHover={onHover}
+          />
+          {showNames && <Label3D text={file.name} position={[x, labelY, z]} />}
+        </React.Fragment>
       );
     } else if (type === 'notepad') {
       return (
-        <Notepad
-          key={file.path}
-          position={[x, deskY + 0.01, z]}
-          rotation={[-Math.PI / 2, 0, rotation * 1.5]}
-          title={file.name}
-          filePath={file.path}
-          color={color}
-          preview={file.preview}
-          onClick={onFileClick}
-          onHover={onHover}
-        />
+        <React.Fragment key={file.path}>
+          <Notepad
+            position={[x, deskY + 0.01, z]}
+            rotation={[-Math.PI / 2, 0, rotation * 1.5]}
+            title={file.name}
+            filePath={file.path}
+            color={color}
+            preview={file.preview}
+            onClick={onFileClick}
+            onHover={onHover}
+          />
+          {showNames && <Label3D text={file.name} position={[x, labelY, z]} />}
+        </React.Fragment>
       );
     } else {
       return (
-        <GenericFile
-          key={file.path}
-          position={[x, deskY + 0.01, z]}
-          rotation={[-Math.PI / 2, 0, rotation]}
-          name={file.name}
-          filePath={file.path}
-          color={color}
-          onClick={onFileClick}
-          onHover={onHover}
-        />
+        <React.Fragment key={file.path}>
+          <GenericFile
+            position={[x, deskY + 0.01, z]}
+            rotation={[-Math.PI / 2, 0, rotation]}
+            name={file.name}
+            filePath={file.path}
+            color={color}
+            onClick={onFileClick}
+            onHover={onHover}
+          />
+          {showNames && <Label3D text={file.name} position={[x, labelY, z]} />}
+        </React.Fragment>
       );
     }
   });
@@ -244,6 +265,7 @@ export default function App() {
   const [openFile, setOpenFile] = useState<{ path: string; name: string; content: string; isImage?: boolean } | null>(null);
   const [toast, setToast] = useState<string | null>(null);
   const [hoveredItem, setHoveredItem] = useState<string | null>(null);
+  const [showNames, setShowNames] = useState(false);
 
   // Show toast message
   const showToast = useCallback((message: string) => {
@@ -360,6 +382,7 @@ export default function App() {
           onFileClick={handleFileClick}
           onFolderClick={handleFolderClick}
           onHover={setHoveredItem}
+          showNames={showNames}
         />
       </Canvas>
 
@@ -382,6 +405,12 @@ export default function App() {
           </button>
           <button className="control-btn" onClick={() => loadDirectory(currentDirectory)}>
             Refresh
+          </button>
+          <button
+            className={`control-btn ${showNames ? 'active' : ''}`}
+            onClick={() => setShowNames(!showNames)}
+          >
+            {showNames ? 'Hide Names' : 'Show Names'}
           </button>
         </div>
 

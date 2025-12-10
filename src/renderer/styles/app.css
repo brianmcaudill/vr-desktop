@@ -102,6 +102,11 @@ body {
   margin-bottom: 0;
 }
 
+.control-btn.active {
+  background: rgba(74, 158, 255, 0.5);
+  border-color: rgba(74, 158, 255, 0.8);
+}
+
 /* Info Panel */
 .info-panel {
   position: absolute;
