@@ -1,0 +1,11 @@
+# Run secret scanner on staged files
+echo "🔍 Scanning for secrets..."
+if command -v gitleaks &> /dev/null; then
+  gitleaks protect --staged -c .gitleaks.toml --exit-code 1 || {
+    echo "❌ Secrets detected! Commit blocked."
+    exit 1
+  }
+  echo "✅ No secrets detected"
+else
+  echo "⚠️  gitleaks not installed, skipping secret scan"
+fi

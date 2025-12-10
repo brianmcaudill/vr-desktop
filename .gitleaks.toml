@@ -1,0 +1,42 @@
+# Gitleaks configuration for Actyra Licensor
+# https://github.com/gitleaks/gitleaks
+
+title = "Actyra Licensor Gitleaks Config"
+
+# Paths to ignore
+[allowlist]
+paths = [
+    '''node_modules/''',
+    '''\.next/''',
+    '''dist/''',
+    '''build/''',
+    '''coverage/''',
+    '''\.git/''',
+    '''package-lock\.json''',
+    '''dashboard/package-lock\.json''',
+]
+
+# Regex patterns for false positives
+regexes = [
+    # Example/placeholder keys in documentation
+    '''sk_live_abc123''',
+    '''sk_test_abc123''',
+    '''ACTR-\d{4}-\d{4}-\d{4}''',
+    '''your-.*-key''',
+    '''your-.*-secret''',
+    '''example-.*-key''',
+]
+
+# Specific commits to ignore (if needed)
+# commits = ["commit-hash-here"]
+
+# Stop words - secrets containing these are ignored
+stopwords = [
+    "example",
+    "placeholder",
+    "your-",
+    "dummy",
+    "test",
+    "fake",
+    "sample",
+]

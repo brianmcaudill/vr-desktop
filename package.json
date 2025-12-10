@@ -1,0 +1,77 @@
+{
+  "name": "vr-desktop",
+  "version": "0.1.0",
+  "description": "Virtual Desktop World - Interact with files as physical objects in 3D space",
+  "main": "./dist/main.js",
+  "author": "Brian McAudill",
+  "license": "UNLICENSED",
+  "scripts": {
+    "dev": "concurrently \"npm run dev:main\" \"npm run dev:renderer\"",
+    "dev:main": "tsc -p tsconfig.main.json -w",
+    "dev:renderer": "webpack serve --config webpack.renderer.dev.js",
+    "build": "npm run build:main && npm run build:renderer",
+    "build:main": "tsc -p tsconfig.main.json",
+    "build:renderer": "webpack --config webpack.renderer.prod.js",
+    "start": "electron .",
+    "package": "npm run build && electron-builder",
+    "package:win": "npm run build && electron-builder --win portable",
+    "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
+    "prepare": "husky",
+    "audit:secrets": "gitleaks protect --staged -c .gitleaks.toml",
+    "audit:secrets:all": "gitleaks detect --source . -c .gitleaks.toml",
+    "audit:dupes": "jscpd .",
+    "audit:dead": "knip",
+    "audit:all": "npm run audit:secrets && npm run audit:dupes && npm run audit:dead",
+    "scan:assets": "node scripts/asset-audit.js ."
+  },
+  "dependencies": {
+    "@react-three/fiber": "^8.17.10",
+    "electron-log": "^5.1.7",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "three": "^0.170.0"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^20.2.0",
+    "@commitlint/config-conventional": "^20.2.0",
+    "@types/node": "^20.14.10",
+    "@types/react": "^18.3.3",
+    "@types/react-dom": "^18.3.0",
+    "@types/three": "^0.170.0",
+    "@typescript-eslint/eslint-plugin": "^7.16.0",
+    "@typescript-eslint/parser": "^7.16.0",
+    "concurrently": "^8.2.2",
+    "css-loader": "^7.1.2",
+    "electron": "^38.2.2",
+    "electron-builder": "^24.13.3",
+    "eslint": "^8.57.0",
+    "eslint-plugin-react-hooks": "^7.0.1",
+    "html-webpack-plugin": "^5.6.0",
+    "husky": "^9.1.7",
+    "jscpd": "^4.0.5",
+    "knip": "^5.73.0",
+    "style-loader": "^4.0.0",
+    "ts-loader": "^9.5.1",
+    "typescript": "^5.5.3",
+    "webpack": "^5.92.1",
+    "webpack-cli": "^5.1.4",
+    "webpack-dev-server": "^5.0.4"
+  },
+  "build": {
+    "appId": "com.brianmcaudill.vr-desktop",
+    "productName": "VR Desktop",
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "dist/**/*",
+      "package.json"
+    ],
+    "win": {
+      "target": "portable"
+    },
+    "portable": {
+      "artifactName": "VR-Desktop-portable.exe"
+    }
+  }
+}

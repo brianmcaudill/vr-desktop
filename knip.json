@@ -1,0 +1,31 @@
+{
+  "$schema": "https://unpkg.com/knip@5/schema.json",
+  "entry": [
+    "src/index.js",
+    "src/server/index.js"
+  ],
+  "project": [
+    "src/**/*.{js,ts}",
+    "scripts/**/*.js"
+  ],
+  "ignore": [
+    "node_modules/**",
+    "dist/**",
+    "build/**",
+    "coverage/**",
+    ".next/**",
+    "dashboard/**",
+    "packages/**",
+    "supabase/functions/**"
+  ],
+  "ignoreDependencies": [
+    "@babel/core",
+    "@babel/preset-env",
+    "babel-loader",
+    "crypto-browserify",
+    "os-browserify",
+    "path-browserify",
+    "stream-browserify"
+  ],
+  "ignoreExportsUsedInFile": true
+}

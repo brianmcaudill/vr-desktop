@@ -1,0 +1,27 @@
+appId: com.brianmcaudill.vr-desktop
+productName: VR Desktop
+
+directories:
+  output: release
+  buildResources: build
+
+files:
+  - dist/**/*
+  - package.json
+
+includeSubNodeModules: false
+
+win:
+  target: nsis
+  icon: build/icon.png
+
+nsis:
+  oneClick: false
+  allowToChangeInstallationDirectory: true
+  artifactName: VR-Desktop-Setup-${version}.exe
+  perMachine: false
+  uninstallDisplayName: VR Desktop
+
+npmRebuild: false
+buildDependenciesFromSource: false
+compression: normal
